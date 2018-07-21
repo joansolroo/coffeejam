@@ -1,0 +1,26 @@
+fileFormatVersion: 2
+guid: b67c55b1c5ed534429d970286378ba11
+timeCreated: 1532119060
+licenseType: Free
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: TeX Gyre Termes
+  fontNames:
+  - TeX Gyre Termes
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 5e4939916ec7a31448bb2d130e2a6570, type: 3}
+  - {fileID: 12800000, guid: a395ee92ba1aa094d93235b63e0655ba, type: 3}
+  - {fileID: 12800000, guid: 8d146743ae608d3438b0570ecd9896d1, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
