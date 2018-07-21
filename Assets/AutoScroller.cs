@@ -14,6 +14,7 @@ public class AutoScroller : MonoBehaviour {
 
     [SerializeField] int lineCount;
     [SerializeField] float fontSize = 0.1f;
+    [SerializeField] Vector2 anchorMin;
     [SerializeField] Vector2 anchorMax;
     // Use this for initialization
     void Start () {
@@ -26,16 +27,17 @@ public class AutoScroller : MonoBehaviour {
 
         
         lineCount = text.text.Split('\n').Length;
-        anchorMax = rectTransform.anchorMax;
-        if ((lineCount) * fontSize < 1)
+        //anchorMax = rectTransform.anchorMax;
+       // if ((lineCount) * fontSize < 1)
         {
             text.alignment = TextAnchor.UpperLeft;
         }
-        else
+       // else
         {
-            text.alignment = TextAnchor.LowerLeft;
-            //rectTransform.anchorMin = new Vector2(0, 0.1f);
-            rectTransform.anchorMax = new Vector2(1, (lineCount) * fontSize);
+           // text.alignment = TextAnchor.LowerLeft;
+           // rectTransform.anchorMin = new Vector2(0,);
+            rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, (lineCount+2) * fontSize);
+           // rectTransform.anchorMax = new Vector2(1, (lineCount) * fontSize);
             
         }
         scrollbar.value = 0;

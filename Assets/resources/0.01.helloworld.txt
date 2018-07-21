@@ -1,0 +1,11 @@
+using Noot.Engine;
+
+// this is the first program
+// i am writing it because my boss told me to
+class Main{
+
+	void start(){
+		// says hello
+		print("hello world!");
+	}
+}

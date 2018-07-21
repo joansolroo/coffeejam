@@ -31,6 +31,7 @@ public class Typer : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
+
         if (Input.anyKeyDown)
         {
             if (currentCharacter < text.Length)
@@ -62,6 +63,7 @@ public class Typer : MonoBehaviour {
             {
                 Debug.Log("EOF!");
             }
+            textfield.Changed();
         };
     }
     /*
