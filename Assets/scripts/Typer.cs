@@ -10,14 +10,22 @@ public class Typer : MonoBehaviour {
     [SerializeField] float failRatio = 0.05f;
 
     [SerializeField] TextAsset file;
-    [SerializeField] Text textfield;
+    [SerializeField] TextFormatter textfield;
     int currentCharacter = 0;
     string text;
+
+    public int lineCount
+    {
+        get
+        {
+            return text.Split('\n').Length;
+        }
+    }
+
 	// Use this for initialization
 	void Start () {
         textfield.text = "";
         text = file.text;
-
     }
 
     // Update is called once per frame
