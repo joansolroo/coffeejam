@@ -26,14 +26,21 @@ public class TextFormatter : MonoBehaviour
         string spaceChars = "=\t ";
         string specialChars = "={}[](),;:*/+-&|<> ";
         string numericChars = "0123456789";
-        int l = 0;
+
         int idx = 0;
-        foreach (string line in lines)
+        for (int l = 0; l < lines.Length; ++l)
         {
-            formattedText += "<b><color=#" + ColorUtility.ToHtmlStringRGB(new Color(0.4f, 0.4f, 0.4f)) + ">";
-            formattedText += (++l).ToString("000") + ".\t";
-            formattedText += "</color></b>";
+            string line = lines[l];
+
+            
+            
+            if (l > lines.Length - 20) 
+            
             {
+                formattedText += "<b><color=#" + ColorUtility.ToHtmlStringRGB(new Color(0.4f, 0.4f, 0.4f)) + ">";
+                formattedText += (l).ToString("000") + ".\t";
+                formattedText += "</color></b>";
+
                 List<string> words = new List<string>();
                 string word = "";
                 bool isComment = false;

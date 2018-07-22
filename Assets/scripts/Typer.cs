@@ -3,41 +3,36 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using UnityEngine.UI;
+
+[RequireComponent(typeof(CharacterProfile))]
+[RequireComponent(typeof(Project))]
 public class Typer : MonoBehaviour
 {
-
-    [SerializeField] int charPerKey = 1;
-    [SerializeField] float critRatio = 0.05f;
-    [SerializeField] float failRatio = 0.05f;
-
-    [SerializeField] int fileCount = 1; //replace with list of files
-    [SerializeField] TextAsset file;
-
     [SerializeField] TextFormatter textfield;
-    [SerializeField] Slider progressFile;
-    [SerializeField] Slider progressProject;
-    [SerializeField] Slider CPSSlider;
-    [SerializeField] Button submitButton;
 
     int currentCharacter = 0;
-    string text;
 
     public static char[] ErrorChars = new char[] { 'б', 'в', 'г', 'д', 'ж', 'з', 'к', 'л', 'м', 'н', 'п', 'ф', 'ц', 'ч', 'ш', 'щ', 'й', 'э', 'ы', 'я', 'ё', 'ю', 'и' };
     public static HashSet<char> ErrorCharsSet = new HashSet<char>();
+
+    Project project;
+    CharacterProfile profile;
 
     public int lineCount
     {
         get
         {
-            return text.Split('\n').Length;
+            return project.currentFileLineCount;
         }
     }
 
     // Use this for initialization
     void Start()
     {
+        project = GetComponent<Project>();
+        profile = GetComponent<CharacterProfile>();
+
         textfield.text = "";
-        text = file.text;
 
         ErrorCharsSet.Clear();
         foreach (char c in ErrorChars) ErrorCharsSet.Add(c);
@@ -45,8 +40,9 @@ public class Typer : MonoBehaviour
 
     [SerializeField] string input;
     List<float> cpsWindow = new List<float>();
-    [SerializeField] float CPM;
+    [SerializeField] public float CPM;
     [SerializeField] float WindowSize = 30;
+
     // Update is called once per frame
     void Update()
     {
@@ -55,25 +51,25 @@ public class Typer : MonoBehaviour
 
         if (Input.GetKey(KeyCode.Backspace))
         {
-            textfield.text = textfield.text.Remove(textfield.text.Length - charPerKey);
+            textfield.text = textfield.text.Remove(textfield.text.Length - profile.charPerKey);
             textfield.Changed();
-            currentCharacter -= charPerKey;
+            currentCharacter -= profile.charPerKey;
         }
         else if (Input.anyKeyDown)
         {
-            if (currentCharacter < text.Length)
+            if (currentCharacter < project.currentFileText.Length)
             {
                 
                 foreach (char i in input)
                 {
-                    if (Random.value < failRatio)
+                    if (Random.value < profile.failRatio)
                     {
                         Debug.Log("fail");
-                        for (int c = 0; c < charPerKey; ++c)
+                        for (int c = 0; c < profile.charPerKey; ++c)
                         {
-                            if (text[currentCharacter] == ' ' || text[currentCharacter] == '\n' || text[currentCharacter] == '\t')
+                            if (project.currentFileText[currentCharacter] == ' ' || project.currentFileText[currentCharacter] == '\n' || project.currentFileText[currentCharacter] == '\t')
                             {
-                                textfield.text += text[currentCharacter++];
+                                textfield.text += project.currentFileText[currentCharacter++];
                             }
                             else
                             {
@@ -85,19 +81,19 @@ public class Typer : MonoBehaviour
                     }
                     else
                     {
-                        if (Random.value < critRatio)
+                        if (Random.value < profile.critRatio)
                         {
                             Debug.Log("CRIT!");
 
-                            for (int c = 0; c < charPerKey; ++c)
+                            for (int c = 0; c < profile.charPerKey; ++c)
                             {
-                                textfield.text += text[currentCharacter++];
+                                textfield.text += project.currentFileText[currentCharacter++];
                                 charsPerFrame++;
                             }
                         }
-                        for (int c = 0; c < charPerKey; ++c)
+                        for (int c = 0; c < profile.charPerKey; ++c)
                         {
-                            textfield.text += text[currentCharacter++];
+                            textfield.text += project.currentFileText[currentCharacter++];
                             charsPerFrame++;
                         }
 
@@ -113,13 +109,6 @@ public class Typer : MonoBehaviour
             textfield.Changed();
         };
 
-        progressFile.value = ((float)textfield.text.Length) / text.Length;
-        
-        submitButton.interactable = progressFile.value == 1;
-        /*if(progressFile.value ==1)
-        {
-            progressProject.value += 1f / fileCount;
-        }*/
         cpsWindow.Add(charsPerFrame / Time.deltaTime);
         if (cpsWindow.Count > WindowSize)
         {
@@ -130,21 +119,9 @@ public class Typer : MonoBehaviour
         {
             cpm += c;
         }
-        CPM = cpm*60 / cpsWindow.Count;
-        CPSSlider.value = Mathf.Min(1, CPM / 3000);
-        failRatio = CPSSlider.value < 0.5f ? 0 : 0.25f;
 
-        CPSSlider.fillRect.GetComponent<Image>().color = Color.Lerp(Color.green, Color.red, CPSSlider.value);
+        CPM = cpm*60 / WindowSize;
+
+        project.SetProgress(((float)textfield.text.Length) / project.currentFileText.Length);
     }
-    /*
-    public string Read(string path)
-    {
-        string txt;
-        //Read the text from directly from the test.txt file
-        StreamReader reader = new StreamReader();
-        txt = reader.ReadToEnd();
-        Debug.Log(txt);
-        reader.Close();
-        return txt;
-    }*/
 }
