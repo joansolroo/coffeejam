@@ -141,16 +141,27 @@ public class TextFormatter : MonoBehaviour
                         formattedText += w;
                         formattedText += "</color>";
                     }
-                    /*else if (TODO DETECT ERROR)
+                    else 
                     {
-                        formattedText += "<b><i><color=#" + ColorUtility.ToHtmlStringRGB(errorColor) + ">";
-                        formattedText += w;
-                        formattedText += "</color></i></b>";
-                    }*/
+                        foreach(char c in w)
+                        {
+                            if (Typer.ErrorCharsSet.Contains(c))
+                            {
+                                formattedText += "<b><i><color=#" + ColorUtility.ToHtmlStringRGB(errorColor) + ">";
+                                formattedText += c;
+                                formattedText += "</color></i></b>";
+                            }
+                            else
+                            {
+                                formattedText += c;
+                            }
+                        }
+                        
+                    }/*
                     else
                     {
                         formattedText += w;
-                    }
+                    }*/
                     //formattedText += ' ';
 
                 }
